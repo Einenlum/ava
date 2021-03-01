@@ -1,8 +1,12 @@
-def my_application(environ, start_response):
-    data = b'Hello world'
-    start_response("200 OK", [
-        ("Content-Type", "text/plain"),
-        ("Content-Length", str(len(data)))
-    ])
+from view import hello_pycon
+from http_utils import Request
 
-    return iter([data])
+
+def my_application(environ, start_response):
+    request = Request.build_from_wsgi(environ)
+
+    response = hello_pycon(request)
+
+    start_response(response.status, response.headers)
+
+    return iter([response.content])
