@@ -20,4 +20,4 @@ def test_the_response_gives_accurate_status():
     )
 
     for (code, description) in expected_answers:
-        assert Response(code, 'Some content').status == description
+        assert Response('Some content', status=code).status == description

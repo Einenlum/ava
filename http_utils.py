@@ -19,7 +19,7 @@ class Request:
 class Response:
     DEFAULT_CONTENT_TYPE = 'text/html; charset=utf8'
 
-    def __init__(self, status: int, content):
+    def __init__(self, content, status:int=200):
         status_description = responses.get(status, 'Undefined')
         self.status = f'{status} {status_description}'
         self.content = bytes(content, encoding='utf8')
