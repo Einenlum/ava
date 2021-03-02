@@ -16,5 +16,5 @@ poetry shell
 Launch the wsgi server on port 8000:
 
 ```
-gunicorn -w 4 app:my_app --reload
+APP_PATH=your_module.your_app_function gunicorn -w 4 app:my_app --reload
 ```

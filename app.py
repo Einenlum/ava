@@ -1,17 +1,19 @@
-from view import hello_pycon
 from http_utils import Request
+from importlib import import_module
+import os
+
+def get_app():
+    module_path, app_name = os.environ['APP_PATH'].split(':')
+    module = import_module(module_path)
+    func = getattr(module, app_name)
+
+    return func
 
 
-def wsgi_app(function):
-    def wrapper(environ, start_response):
-        request = Request.build_from_wsgi(environ)
-        response = function(request)
-        start_response(response.status, response.headers)
+def framework_app(environ, start_response):
+    request = Request.build_from_wsgi(environ)
+    app = get_app()
+    response = app(request)
+    start_response(response.status, response.headers)
 
-        return iter([response.content])
-
-    return wrapper
-
-@wsgi_app
-def my_app(request):
-    return hello_pycon(request)
+    return iter([response.content])
