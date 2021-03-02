@@ -1,5 +1,7 @@
-from urllib.parse import urlparse, parse_qs
 from html import escape
+from http.client import responses
+from urllib.parse import parse_qs, urlparse
+
 
 class Request:
     def __init__(self, querystring):
@@ -15,11 +17,11 @@ class Request:
         return self._query_bag
 
 class Response:
-    HTTP_OK = '200 OK'
     DEFAULT_CONTENT_TYPE = 'text/html; charset=utf8'
 
-    def __init__(self, status, content):
-        self.status = status
+    def __init__(self, status: int, content):
+        status_description = responses.get(status, 'Undefined')
+        self.status = f'{status} {status_description}'
         self.content = bytes(content, encoding='utf8')
     
     @property
