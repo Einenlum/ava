@@ -1,6 +1,7 @@
 import pytest
 from http_utils import Request, Response
 import routing
+from routing import Route
 
 def view_home(request: Request) -> Response:
     return Response('Homepage')
@@ -9,8 +10,8 @@ def view_article(request: Request, slug: str, id: str) -> Response:
     return Response('Some response')
 
 route_declarations = [
-    (r'/', view_home),
-    (r'/article/{slug}/comment/{id}', view_article)
+    Route(r'/', view_home),
+    Route(r'/article/{slug}/comment/{id}', view_article)
 ]
 
 def test_it_compiles_route_declarations():

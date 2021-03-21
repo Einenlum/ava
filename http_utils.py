@@ -2,15 +2,30 @@ from html import escape
 from http.client import responses
 from urllib.parse import parse_qs, urlparse
 
-
 class Request:
-    def __init__(self, path, querystring=''):
+    def __init__(self, path, querystring='', body='', headers={}, method='GET'):
         self._query_bag = QueryBag(parse_qs(querystring))
         self.path = path
+        self.body = body
+        self.method = method
+        self.headers = headers
 
     @classmethod
     def build_from_wsgi(cls, environ):
-        return Request(environ['RAW_URI'], querystring=environ['QUERY_STRING'])
+        pprint.pprint(environ)
+        body = environ['wsgi.input'].read() or b''
+        method = environ['REQUEST_METHOD']
+        headers = {
+            'CONTENT_TYPE': environ.get('CONTENT_TYPE', '')
+        }
+
+        return Request(
+            environ['RAW_URI'],
+            querystring=environ['QUERY_STRING'],
+            body=body.decode('UTF-8'),
+            headers=headers,
+            method=method
+        )
 
     @property
     def query(self):
