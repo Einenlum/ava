@@ -1,4 +1,4 @@
-from http_utils import Request
+from http_utils import Request, Response, TemplateResponse
 from importlib import import_module
 import os
 import routing
@@ -15,6 +15,8 @@ def framework_app(environ, start_response):
     request = Request.build_from_wsgi(environ)
     routes = get_routes()
     response = routing.call_view(request, routes)
+    if isinstance(response, TemplateResponse):
+        response = response.render()
     start_response(response.status, response.headers)
 
     return iter([response.content])
