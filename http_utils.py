@@ -6,11 +6,10 @@ from urllib.parse import parse_qs, urlparse
 class Request:
     def __init__(self, path, querystring=''):
         self._query_bag = QueryBag(parse_qs(querystring))
-        self._path = path
+        self.path = path
 
     @classmethod
     def build_from_wsgi(cls, environ):
-        print(environ)
         return Request(environ['RAW_URI'], querystring=environ['QUERY_STRING'])
 
     @property
