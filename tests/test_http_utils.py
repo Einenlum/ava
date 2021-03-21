@@ -22,3 +22,13 @@ def test_the_response_gives_accurate_status():
 
     for (code, description) in expected_answers:
         assert Response('Some content', status=code).status == description
+
+def test_a_response_is_created_with_the_right_headers():
+    response = Response('Some content', 403)
+
+    assert response.content == b'Some content'
+    assert response.status == '403 Forbidden'
+    assert response.headers == [
+        ('Content-Type', 'text/html; charset=utf8'),
+        ('Content-Length', '12')
+    ]
