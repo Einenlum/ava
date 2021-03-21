@@ -2,10 +2,11 @@ import pytest
 from http_utils import Request, Response
 
 def test_the_request_parses_querystrings():
-    environ = {'QUERY_STRING': 'foo=lol&bar=baz&empty'}
+    environ = {'QUERY_STRING': 'foo=lol&bar=baz&empty', 'RAW_URI': r'/article'}
 
     request = Request.build_from_wsgi(environ)
 
+    assert request.path == r'/article'
     assert request.query.get('foo') == 'lol'
     assert request.query.get('bar') == 'baz'
     assert request.query.get('empty') == None
